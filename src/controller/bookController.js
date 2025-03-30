@@ -1,5 +1,6 @@
 import express from "express";
 import BookService from "../services/bookServices.js";
+import BorrowedBookService from "../services/borrowedBookServices.js";
 import sendResponse from "../utils/responseSender.js";
 import {
 	ReasonPhrases,
@@ -21,6 +22,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   // Check if book exists
   const result = await BookService.getById(req.params.id);
+  const currentOwner = await BorrowedBookService.getCurrentOwner(req.params.id);
+  const avgScore = await BorrowedBookService.getAverageScoreByBookId(req.params.id);
+  if(currentOwner.length > 0) {
+    result.currentOwner = currentOwner[0].userId;
+    result.user = currentOwner[0].user;
+  }
+  result.avgScore = avgScore ? avgScore : -1;
   if (!result) {
     throw new NotFound("Book not found");
   }

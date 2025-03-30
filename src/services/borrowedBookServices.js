@@ -7,11 +7,48 @@ const getAllByUserId = async (userId) => {
       book: {
         select: {
           name: true,
+          author: true,
+          coverImage: true,
         }
       }
     }
   });
 };
+
+const getCurrentOwner = async (bookId) => {
+  return prisma.borrowedBook.findMany({ 
+    where: { 
+      bookId: bookId,
+      returnedAt: null,
+    },
+    include: { 
+      user: {
+        select: {
+          name: true,
+          email: true,
+          image: true,
+        } 
+      }
+    }
+  });
+};
+
+const getAverageScoreByBookId = async (bookId) => {
+  const result = await prisma.borrowedBook.aggregate({
+    where: {
+      bookId: bookId,
+      score: { not: null }
+    },
+    _avg: {
+      score: true
+    }
+  });
+
+  return result._avg.score; // Ortalama puanı döndür
+};
+
+
+
 
 const create = async (payload) => {
     return prisma.borrowedBook.create({ data: payload });
@@ -38,4 +75,6 @@ export default {
   create,
   getById,
   update,
+  getCurrentOwner,
+  getAverageScoreByBookId
 };
