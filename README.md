@@ -19,11 +19,20 @@
     ```sh
     npm install
     ```
-3. Start the server
+3. Run database migration script // to create models  // see package.json scripts
+    ```sh
+    npm run migrate
+    ```
+
+4. Run seed script // to create inital data // see package.json scripts
+    ```sh
+    npm run seed
+    ```
+5. Start the server
     ```sh
     npm run dev
     ```
-4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+6. Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 ## Usage
 
@@ -48,7 +57,3 @@
     ```sh
     npx prisma studio
     ```
-
-### Database ERD
-
-![prisma](https://github.com/Tamrakar182/Express-Prisma-Postgresql/assets/84511488/ca61bee2-8ee1-4d11-b410-2ff7cb6caa42)
